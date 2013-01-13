@@ -1,4 +1,1 @@
-canvas-fun
-==========
-
-Playing with HTML5 Canvas for the first time
+Canvas Fun - Built on HTML5 Boilerplate
