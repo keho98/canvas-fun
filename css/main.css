@@ -298,3 +298,55 @@ textarea {
         page-break-after: avoid;
     }
 }
+
+/* Custom styles */
+
+body{
+  color:#777;
+  padding-left:2%;
+  font-family: 'Helvetica';
+}
+
+h1,h2,h3,h4,h5,h6,div{
+  font-weight:300;
+  margin-bottom:0;
+}
+
+canvas{
+    margin: 30px;
+}
+
+.description{
+  font-weight:300;
+  width:75%;
+  margin-left: 40px;
+}
+
+a{
+  color: #0072C6;
+  text-decoration: none;
+}
+
+a:visited{
+  color: #0072C6;
+}
+
+a:hover{
+  color: #0072C6;
+  cursor:pointer;
+  text-decoration: underline;
+}
+
+a.btn{
+  text-decoration:none;
+  padding: .5em;
+  color: white;
+  background-color: blue;
+  cursor:pointer;
+  margin:5px;
+}
+
+a.btn:hover{
+  color: white;
+  background-color: black;
+}
