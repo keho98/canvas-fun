@@ -31,8 +31,6 @@ $(function(){
 			grid.push(new Array());
 			gridBuffer.push(new Array());
 			for(var j = 0; j < rows; j++){
-				if(Math.random() > .75) grid[i][j] = defaultColor;
-				else grid[i][j] = 'empty';
 				gridBuffer[i][j] = 'empty';
 			}
 		}
@@ -55,7 +53,6 @@ $(function(){
 	}
 
 	function draw(){
-		console.log("Drawing");
 		if (canvas.getContext) {
 		  var context = canvas.getContext("2d");
 		  for(var i = 0; i < cols; i++){
@@ -106,6 +103,19 @@ $(function(){
 				return 'empty';
 		}
 	}
+
+	function start(){
+		setInterval(draw, 500);
+	}
+
+	//Add event listeners
+	$('#start').on('click', function(){
+		start();
+	});
+
+	$canvas.on('click', function(e){
+
+	});
 
 	init();
 });
