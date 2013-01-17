@@ -36,20 +36,11 @@ $(function(){
 		}
 		if (canvas.getContext) {
 		  var context = canvas.getContext("2d");
-		  for(var i = 0; i < cols; i++){
-		  	for(var j = 0; j < rows; j++){
-		  		context.beginPath();
-					context.rect(i*cellWidth,j*cellHeight,cellWidth,cellHeight);
-					if(grid[i][j] === 'empty') context.fillStyle = 'rgb(256,256,256)';
-					else context.fillStyle = grid[i][j];
-					context.fill();
-					context.strokeStyle = 'rgb(40,40,40)';
-					context.lineWidth = strokeWidth;
-					context.stroke();
-		  	}
-		  }
+		  renderGrid(context, gridBuffer);
+		  var tmp = grid;
+		  grid = gridBuffer;
+		  gridBuffer = tmp;
 		}
-		setInterval(draw, 500);
 	}
 
 	function draw(){
@@ -60,22 +51,26 @@ $(function(){
 		  		gridBuffer[i][j] = getNextState(i,j,grid);
 		  	}
 		  }
-		  for(var i = 0; i < cols; i++){
-		  	for(var j = 0; j < rows; j++){
-		  		context.beginPath();
-					context.rect(i*cellWidth,j*cellHeight,cellWidth,cellHeight);
-					if(gridBuffer[i][j] === 'empty') context.fillStyle = 'rgb(256,256,256)';
-					else context.fillStyle = gridBuffer[i][j];
-					context.fill();
-					context.strokeStyle = strokeStyle;
-					context.lineWidth = strokeWidth;
-					context.stroke();
-		  	}
-		  }
+		  renderGrid(context, gridBuffer);
 		  var tmp = grid;
 		  grid = gridBuffer;
 		  gridBuffer = tmp;
 		}
+	}
+
+	function renderGrid(context, dataGrid){
+	  for(var i = 0; i < cols; i++){
+	  	for(var j = 0; j < rows; j++){
+	  		context.beginPath();
+				context.rect(i*cellWidth,j*cellHeight,cellWidth,cellHeight);
+				if(dataGrid[i][j] === 'empty') context.fillStyle = 'rgb(256,256,256)';
+				else context.fillStyle = dataGrid[i][j];
+				context.fill();
+				context.strokeStyle = strokeStyle;
+				context.lineWidth = strokeWidth;
+				context.stroke();
+	  	}
+	  }
 	}
 
 	function inBounds(x,y){
@@ -110,11 +105,23 @@ $(function(){
 
 	//Add event listeners
 	$('#start').on('click', function(){
+		console.log(gridBuffer)
 		start();
+
 	});
 
 	$canvas.on('click', function(e){
-
+		var x = Math.floor((e.pageX-$(this).offset().left) / cellWidth);
+    var y = Math.floor((e.pageY-$(this).offset().top) / cellHeight);
+    gridBuffer[x][y] = (gridBuffer[x][y] === 'empty')? defaultColor : 'empty';
+    grid[x][y] = gridBuffer[x][y]
+    if(canvas.getContext){
+    	var context = canvas.getContext("2d");
+    	renderGrid(context, gridBuffer);
+ 		  var tmp = grid;
+		  grid = gridBuffer;
+		  gridBuffer = tmp;
+  	}
 	});
 
 	init();
