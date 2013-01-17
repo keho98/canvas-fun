@@ -32,6 +32,7 @@ $(function(){
 			gridBuffer.push(new Array());
 			for(var j = 0; j < rows; j++){
 				gridBuffer[i][j] = 'empty';
+				grid[i][j] = 'empty';
 			}
 		}
 		if (canvas.getContext) {
