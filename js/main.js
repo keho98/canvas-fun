@@ -1,6 +1,5 @@
 /*
- * Game of Life
- * Game of life with a twist
+ * Motion test
  */
 
 $(function(){
@@ -57,7 +56,7 @@ $(function(){
 	function addAlpha(ctx){
 		ctx.beginPath();
 		ctx.rect(0,0,width,height);
-		ctx.fillStyle = 'rgba(200,200,200, .1)';
+		ctx.fillStyle = 'rgba(256,256,256, .5)';
 		ctx.fill();
 	}
 
