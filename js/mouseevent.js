@@ -88,5 +88,6 @@ $(function(){
 		c_x = (e.pageX-$(this).offset().left);
     	c_y = (e.pageY-$(this).offset().top);
   	});
+  	$canvas.css('cursor', 'none');
 	init();
 });
