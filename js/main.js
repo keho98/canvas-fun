@@ -1,93 +1,112 @@
 /*
- * Motion test
+ * Motion test on mouse event
  */
+var $canvas, canvas, height, width, rows,cols; 
+var speed = 30;
 
-$(function(){
-	var $canvas = $('#main')
-	var canvas = $canvas.get(0);
-	var speed = 30;
-	var height = $canvas.attr('height');
-	var width = $canvas.attr('width');
+var cellHeight = 20;
+var cellWidth = 20;
+var strokeWidth = 1;
+var strokeStyle = 'rgb(40,40,40)';
 
-	var cellHeight = 20;
-	var cellWidth = 20;
-	var strokeWidth = 1;
-	var strokeStyle = 'rgb(40,40,40)';
-	var rows = height/20;
-	var cols = width/20;
-	var defaultColor = 'rgba(10,40,200, 1)';
+var defaultColor = 'rgba(10,40,200, 1)';
 
-	var grid = new Array();
-	var gridBuffer = new Array();
+var grid = new Array();
+var gridBuffer = new Array();
 
-	var STARTING_RADIUS = 20
-		, MAX_RADIUS = 100;
+var shapes = new Array();
 
-	var radius = STARTING_RADIUS,
+var STARTING_RADIUS = 20
+	, MAX_RADIUS = 40;
+
+var radius = STARTING_RADIUS,
+	expanding = true;
+
+var c_x = 200
+	c_y = 200;
+
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function init(){
+	//Initialize grids
+	shapes.push({x:c_x, y:c_y, shapeType: 'arc', fillStyle: 'rgb(0,0,200)', r1: 50, r2: 0});
+	draw();
+}
+
+function updateRadius(){
+	if(radius < STARTING_RADIUS) {
 		expanding = true;
-	
-	var c_x = 200
-		c_y = 200;
-
-	function getRandomInt(min, max) {
-	  return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
-
-	function init(){
-		//Initialize grids
-		draw();
+	else if(radius > MAX_RADIUS) {
+		expanding = false;
 	}
-
-	function updateRadius(){
-		if(radius < STARTING_RADIUS) {
-			expanding = true;
-		}
-		else if(radius > MAX_RADIUS) {
-			expanding = false;
-		}
-		if(expanding){
-			radius += 2;
-		}
-		else{
-			radius -= 2;
-		}
+	if(expanding){
+		radius += 1;
 	}
+	else{
+		radius -= 1;
+	}
+}
 
-	function addAlpha(ctx){
-		ctx.beginPath();
-		ctx.rect(0,0,width,height);
-		ctx.fillStyle = 'rgba(256,256,256, .5)';
+function addAlpha(ctx){
+	ctx.beginPath();
+	ctx.rect(0,0,width,height);
+	ctx.fillStyle = 'rgba(256,256,256, .5)';
+	ctx.fill();
+}
+
+function drawObject(ctx, obj){
+	//console.log(obj.shapeType);
+	ctx.beginPath();
+	switch(obj.shapeType){
+		case 'arc':
+			ctx.arc(obj.x, obj.y, obj.r1, obj.r2, Math.PI*2, true);
+			break;
+	}
+	if(obj.fillStyle){
+		ctx.fillStyle = obj.fillStyle;
 		ctx.fill();
 	}
-
-	function draw(){
-		if (canvas.getContext) {
-		  var context = canvas.getContext("2d");
-		  context.beginPath();
-		  context.arc(c_x,c_y,radius,0,Math.PI*2,true);
-		  context.fillStyle = 'rgb(0,0,100)';
-		  context.fill();
-			context.strokeStyle = 'rgb(40,40,40)';
-			context.lineWidth = strokeWidth;
-			context.stroke();
-			updateRadius();
-			addAlpha(context);
-			// Future-proof: when feature is fully standardized
-			if (window.requestAnimationFrame) window.requestAnimationFrame(draw);
-			// IE implementation
-			else if (window.msRequestAnimationFrame) window.msRequestAnimationFrame(draw);
-			// Firefox implementation
-			else if (window.mozRequestAnimationFrame) window.mozRequestAnimationFrame(draw);
-			// Chrome implementation
-			else if (window.webkitRequestAnimationFrame) window.webkitRequestAnimationFrame(draw);
-			// Other browsers that do not yet support feature
-			else setTimeout(draw, PERIOD);
-		}
+	if(obj.strokeStyle){
+		ctx.strokeStyle = obj.strokeStyle;
+		ctx.stroke();
 	}
+}
+
+function draw(){
+	if (canvas.getContext) {
+		var context = canvas.getContext("2d");
+		for(var i = 0; i < shapes.length; i++){
+			drawObject(context,shapes[i]);
+		}
+		updateRadius();
+		addAlpha(context);
+		// Future-proof: when feature is fully standardized
+		if (window.requestAnimationFrame) window.requestAnimationFrame(draw);
+		// IE implementation
+		else if (window.msRequestAnimationFrame) window.msRequestAnimationFrame(draw);
+		// Firefox implementation
+		else if (window.mozRequestAnimationFrame) window.mozRequestAnimationFrame(draw);
+		// Chrome implementation
+		else if (window.webkitRequestAnimationFrame) window.webkitRequestAnimationFrame(draw);
+		// Other browsers that do not yet support feature
+		else setTimeout(draw, PERIOD);
+	}
+}
+
+
+$(function(){
+	$canvas = $('#main')
+	canvas = $canvas.get(0);
+	height = $canvas.attr('height');
+	width = $canvas.attr('width');
+	rows = height/20;
+	cols = width/20;
 	$canvas.on('mousemove', function(e){
-		c_x = (e.pageX-$(this).offset().left);
-    c_y = (e.pageY-$(this).offset().top);
-    console.log("Hello");
-  });
+		shapes[0].x = (e.pageX-$(this).offset().left);
+    	shapes[0].y = (e.pageY-$(this).offset().top);
+  	});
 	init();
 });
