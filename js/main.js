@@ -27,6 +27,8 @@ $(function(){
 	var radius = STARTING_RADIUS,
 		expanding = true;
 	
+	var c_x = 200
+		c_y = 200;
 
 	function getRandomInt(min, max) {
 	  return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -54,7 +56,7 @@ $(function(){
 
 	function addAlpha(ctx){
 		ctx.beginPath();
-		ctx.rect(50,50,300,300);
+		ctx.rect(0,0,width,height);
 		ctx.fillStyle = 'rgba(200,200,200, .1)';
 		ctx.fill();
 	}
@@ -63,7 +65,7 @@ $(function(){
 		if (canvas.getContext) {
 		  var context = canvas.getContext("2d");
 		  context.beginPath();
-		  context.arc(200,200,radius,0,Math.PI*2,true);
+		  context.arc(c_x,c_y,radius,0,Math.PI*2,true);
 		  context.fillStyle = 'rgb(0,0,100)';
 		  context.fill();
 			context.strokeStyle = 'rgb(40,40,40)';
@@ -83,5 +85,10 @@ $(function(){
 			else setTimeout(draw, PERIOD);
 		}
 	}
+	$canvas.on('mousemove', function(e){
+		c_x = (e.pageX-$(this).offset().left);
+    c_y = (e.pageY-$(this).offset().top);
+    console.log("Hello");
+  });
 	init();
 });
