@@ -25,13 +25,15 @@ var radius = STARTING_RADIUS,
 var c_x = 200
 	c_y = 200;
 
+var GRAVITY = -9.81;
+
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function init(){
 	//Initialize grids
-	shapes.push({x:c_x, y:c_y, shapeType: 'arc', fillStyle: 'rgb(0,0,200)', r1: 50, r2: 0});
+	shapes.push({x:c_x, y:c_y, v_x:0, v_y:0,shapeType: 'arc', fillStyle: 'rgb(0,0,200)', r1: 50, r2: 0});
 	draw();
 }
 
