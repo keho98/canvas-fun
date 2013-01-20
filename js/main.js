@@ -33,7 +33,7 @@ function getRandomInt(min, max) {
 
 function init(){
 	//Initialize grids
-	shapes.push({x:c_x, y:c_y, v_x:0, v_y:0,shapeType: 'arc', fillStyle: 'rgb(0,0,200)', r1: 50, r2: 0});
+	shapes.push({x:c_x, y:c_y, v_x:0, v_y:0,shapeType: 'arc', strokeStyle: 'rgb(0,0,200)', r1: 50, r2: 0, v_r: 5});
 	draw();
 }
 
@@ -50,6 +50,10 @@ function updateRadius(){
 	else{
 		radius -= 1;
 	}
+}
+
+function updateShape(i){
+	shapes[i].r1 += shapes[i].v_r;
 }
 
 function addAlpha(ctx){
@@ -82,9 +86,14 @@ function draw(){
 		var context = canvas.getContext("2d");
 		for(var i = 0; i < shapes.length; i++){
 			drawObject(context,shapes[i]);
+			updateShape(i);
+			if(shapes[i].r1 > 500){
+				shapes.splice(i,i);
+			}
 		}
 		updateRadius();
 		addAlpha(context);
+		shapes.push({x:c_x, y:c_y, v_x:0, v_y:0,shapeType: 'arc', strokeStyle: 'rgb(0,0,200)', r1: 50, r2: 0, v_r: 10});
 		// Future-proof: when feature is fully standardized
 		if (window.requestAnimationFrame) window.requestAnimationFrame(draw);
 		// IE implementation
@@ -107,8 +116,8 @@ $(function(){
 	rows = height/20;
 	cols = width/20;
 	$canvas.on('mousemove', function(e){
-		shapes[0].x = (e.pageX-$(this).offset().left);
-    	shapes[0].y = (e.pageY-$(this).offset().top);
+			c_x = (e.pageX-$(this).offset().left);
+    	c_y = (e.pageY-$(this).offset().top);
   	});
 	init();
 });
