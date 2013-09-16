@@ -10,8 +10,8 @@ $(function(){
 	var height = $canvas.attr('height');
 	var width = $canvas.attr('width');
 
-	var cellHeight = 20;
-	var cellWidth = 20;
+	var cellHeight = 30;
+	var cellWidth = 30;
 	var strokeWidth = 1;
 	var strokeStyle = 'rgb(40,40,40)';
 	var rows = height/20;
